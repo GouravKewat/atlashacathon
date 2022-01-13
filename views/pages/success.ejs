@@ -21,7 +21,7 @@
    </li>
   <% for(var i=0;i<tasks.length;i++){ %>
 
-  <li class="list-group-item"><%=tasks[i].text%></li>
+  <li class="list-group-item"><%=tasks[i].text%> <a href="delete?id=<%=tasks[i]._id%>"><button>Remove</button></a></li>
   <% } %>
   </ul>
 
