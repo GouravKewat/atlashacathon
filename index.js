@@ -9,7 +9,7 @@ var urlencodedParser = bodyParser.urlencoded({ extended: false })
 var tasks;
 const session = require('express-session');
 var MongoClient = require('mongodb').MongoClient;
-var url = "mongodb+srv://user2:coolpassword@cluster0.flkio.mongodb.net/firstdb?retryWrites=true&w=majority";
+var url = "<connectton url here>";
 app.set('view engine', 'ejs');
 
 app.use(session({
@@ -62,7 +62,20 @@ app.post('/success',urlencodedParser, (req, res) => {
 		  });
 		});
 });
-
+app.get('/delete',urlencodedParser, (req, res) => {
+  //res.render('pages/success', {user: userProfile});
+MongoClient.connect(url, function(err, db) {
+  if (err) throw err;
+  var dbo = db.db("mydb");
+  var myquery = { address: 'Mountain 21' };
+  dbo.collection("tasks").deleteOne({id:req.body.id}, function(err, obj) {
+    if (err) throw err;
+    console.log("1 document deleted");
+    db.close();
+    res.redirect('/success');
+  });
+});
+});
 
 app.get('/error', (req, res) => res.send("error logging in"));
  
@@ -78,13 +91,13 @@ passport.deserializeUser(function(obj, cb) {
 /*  Google AUTH  */
  
 var GoogleStrategy = require('passport-google-oauth').OAuth2Strategy;
-const GOOGLE_CLIENT_ID = '118028452917-euet4ah5nhl5ga1a8tfc9qq2lovqa4ft.apps.googleusercontent.com';
-const GOOGLE_CLIENT_SECRET = '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';
+const GOOGLE_CLIENT_ID = '<id here>';
+const GOOGLE_CLIENT_SECRET = '<secret here>';
 
 passport.use(new GoogleStrategy({
     clientID: GOOGLE_CLIENT_ID,
     clientSecret: GOOGLE_CLIENT_SECRET,
-    callbackURL: "https://replyapp.dhruvpatil.repl.co/auth/google/callback"
+    callbackURL: "url"
   },
   function(accessToken, refreshToken, profile, done) {
       userProfile=profile;
